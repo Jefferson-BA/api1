@@ -1,15 +1,22 @@
-✅ 1. Ruteo (Routing)
-✅ 2. Fetch (Consumo de API)
-✅ 3. Globalización (Estado global con Zustand)
+# ✅ Ruteo, Fetch y Globalización (Zustand) — Explicación con tu propio código
 
-Con ejemplos DIRECTOS de tu código.
+A continuación se explica:
 
-🧭 1. RUTEO (ROUTING)
+1. 🧭 **Ruteo (Routing)**
+2. 🌐 **Fetch (Consumo de API)**
+3. 🌍 **Globalización (Estado Global con Zustand)**
 
-El ruteo sirve para navegar entre páginas sin recargar la app.
+Todo usando **ejemplos DIRECTOS** de tu proyecto.
 
-📌 Tú lo usas en App.jsx:
+---
 
+# 🧭 1. Ruteo (Routing)
+
+El ruteo sirve para navegar entre páginas **sin recargar** la app.
+
+## 📌 Ejemplo en `App.jsx`
+
+```jsx
 import { BrowserRouter, Route, Routes } from 'react-router'
 
 <BrowserRouter>
@@ -24,9 +31,7 @@ import { BrowserRouter, Route, Routes } from 'react-router'
     </Route>
   </Routes>
 </BrowserRouter>
-
-🔍 Qué significa cada parte:
-
+🔍 Significado de cada ruta
 / → Página principal
 
 /characters → Lista de personajes
@@ -35,72 +40,78 @@ import { BrowserRouter, Route, Routes } from 'react-router'
 
 /chat → Chat con IA
 
-📌 Y también usas ruteo en los botones:
-
+📌 Navegación con botones
+jsx
+Copiar código
 <Link to="/characters">Explorar</Link>
 
 <Link to={`/characters/${char.id}`}>Ver detalle</Link>
+✔ Aquí usas ruteo para moverte entre páginas.
 
+🌐 2. Fetch (Consumo de API)
+El fetch permite traer datos reales desde la API de Rick & Morty.
 
-✔ Ahí usas ruteo para moverte entre páginas.
-
-🌐 2. FETCH (Consumo de API)
-
-El fetch sirve para traer datos desde la API de Rick & Morty.
-
-📌 Tú lo usas en services/rickMortyApi.js:
-
+📌 Ejemplo en services/rickMortyApi.js
+js
+Copiar código
 export const rickMortyApi = {
   getAllCharacters: async (page = 1) => {
     const response = await fetch(`https://rickandmortyapi.com/api/character?page=${page}`);
     return response.json();
   }
 };
+🔍 Qué está pasando aquí
+✔ Estás consumiendo la API
 
+✔ Recibes la respuesta
 
-👀 Aquí estás:
+✔ La conviertes en JSON
 
-✔ Consumiento la API
-✔ Recibiendo JSON
-✔ Retornando los resultados
+✔ Retornas los datos para usarlos en tu app
 
-Y en tu página:
-
+📌 Uso cuando entras a /characters
+jsx
+Copiar código
 useEffect(() => {
   fetchCharacters(1);
 }, []);
+✔ Ejecuta el fetch al cargar la página
+✔ Luego renderizas personajes con characters.map()
 
+🌍 3. Globalización (Estado Global con Zustand)
+La globalización te permite:
 
-✔ Cuando entras a /characters → ejecutas el fetch
-✔ Luego renderizas los personajes con characters.map()
+Compartir estado entre todas las páginas
 
-🌍 3. GLOBALIZACIÓN (Estado Global con Zustand)
+Sin pasar props
 
-La globalización significa:
-👉 tener valores compartidos entre toda la app
-👉 accesibles en cualquier página
-👉 sin pasarlos como props
+Con acceso directo desde cualquier componente
 
-Tú lo haces con Zustand.
-
-📌 Ejemplo: useCharactersStore.js
-
+📌 Ejemplo en useCharactersStore.js
+js
+Copiar código
 export const useCharactersStore = create((set) => ({
   characters: [],
   isLoading: false,
   error: null,
+
   fetchCharacters: async (page = 1) => {
      const data = await rickMortyApi.getAllCharacters(page);
      set({ characters: data.results });
   }
 }));
+🔍 Qué hace esto
+characters = estado global
 
+fetchCharacters = función para actualizar el estado
 
-En cualquier página puedes hacer:
+Cualquier componente puede usarlo
 
+📌 Uso en cualquier página
+jsx
+Copiar código
 const { characters, fetchCharacters } = useCharactersStore();
+✔ Sin props
+✔ Estado sincronizado
+✔ Disponible en toda la app
 
-
-✔ No necesitas "pasar los datos" desde el padre
-✔ Todas las páginas pueden acceder al mismo estado
-✔ Los cambios se sincronizan automáticamente
